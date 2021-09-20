@@ -1,0 +1,7 @@
+backend/Backend.Data/obj
+backend/Backend.Data/bin
+backend/Backend.Core/bin
+backend/Backend.Core/obj
+backend/Backend.Api/bin
+backend/Backend.Api/obj
+backend/.vs
