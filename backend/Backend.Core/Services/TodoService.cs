@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
+using Backend.Core.Models.Helpers;
 using Backend.Core.Models.Todo;
 using Backend.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace Backend.Core.Services
 
             var todoEntity = new Data.Entities.Todo
             {
+                Name = todo.Name,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
             };
@@ -35,14 +37,29 @@ namespace Backend.Core.Services
             return new TodoModel
             {
                 Id = todoEntity.Id,
-                Description = todo.Description,
-                IsCompleted = todo.IsCompleted,
+                Name = todoEntity.Name,
+                Description = todoEntity.Description,
+                IsCompleted = todoEntity.IsCompleted,
             };
         }
 
         public async Task DeleteTodoAsync(Guid todoId)
         {
             await _repository.RemoveAsync(todoId);
+        }
+
+        public async Task<PaginationModel<TodoModel>> GetPaginationTodosAsync(int page, int pageSize)
+        {
+            IQueryable<Data.Entities.Todo> query = _repository.Get();
+            var todos = await query.Select(todo => new TodoModel
+            {
+                Id = todo.Id,
+                Name = todo.Name,
+                Description = todo.Description,
+                IsCompleted = todo.IsCompleted,
+            })
+            .ToListAsync();
+            return new PaginationModel<TodoModel>(page, pageSize, todos.AsQueryable());
         }
 
         public async Task<TodoModel> GetTodoAsync(Guid todoId)
@@ -57,6 +74,7 @@ namespace Backend.Core.Services
             return new TodoModel
             {
                 Id = todo.Id,
+                Name = todo.Name,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
             };
@@ -68,6 +86,7 @@ namespace Backend.Core.Services
             return await query.Select(todo => new TodoModel
             {
                 Id = todo.Id,
+                Name = todo.Name,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
             })
@@ -79,6 +98,7 @@ namespace Backend.Core.Services
             var todoEntity = new Data.Entities.Todo
             {
                 Id = todo.Id,
+                Name = todo.Name,
                 Description = todo.Description,
                 IsCompleted = todo.IsCompleted,
             };
@@ -88,6 +108,7 @@ namespace Backend.Core.Services
             return new TodoModel
             {
                 Id = todoEntity.Id,
+                Name = todoEntity.Name,
                 Description = todoEntity.Description,
                 IsCompleted = todoEntity.IsCompleted,
             };

@@ -1,6 +1,8 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
+using Backend.Core.Models.Helpers;
 using Backend.Core.Models.Todo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +35,7 @@ namespace Backend.Api.Controllers
             return Ok(todo);
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<TodoModel>> GetTodosAsync()
         {
@@ -41,13 +43,13 @@ namespace Backend.Api.Controllers
             return Ok(todos);
         }
 
-        // [HttpGet]
-        // [ProducesResponseType(StatusCodes.Status200OK)]
-        // public async Task<ActionResult<PaginationModel<TodoModel>>> GetTodosAsync(int page, int pageSize)
-        // {
-        //     var todos = await _todoService.GetTodosAsync();
-        //     return Ok(new PaginationModel<TodoModel>(page, pageSize, todos.AsQueryable()));
-        // }
+        [HttpGet("page")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PaginationModel<TodoModel>>> GetTodosAsync([Required]int page, [Required]int pageSize)
+        {
+            var todos = await _todoService.GetPaginationTodosAsync(page, pageSize);
+            return Ok(todos);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -55,6 +57,7 @@ namespace Backend.Api.Controllers
         {
             var todoModel = new TodoModel
             {
+                Name = createTodoModel.Name,
                 Description = createTodoModel.Description,
                 IsCompleted = createTodoModel.IsCompleted
             };
@@ -83,6 +86,7 @@ namespace Backend.Api.Controllers
             var todoModel = new TodoModel
             {
                 Id = id,
+                Name = updateTodoModel.Name,
                 Description = updateTodoModel.Description,
                 IsCompleted = updateTodoModel.IsCompleted,
             };

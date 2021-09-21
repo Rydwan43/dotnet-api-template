@@ -6,7 +6,7 @@ namespace Backend.Core.Models.Helpers
     {
         public PaginationModel(int page, int pageSize, IQueryable<TModel> items)
         {
-            LastPage = items.Count() / pageSize;
+            LastPage = pageSize == 1 ? 0 : items.Count() / pageSize;
             TotalItems = items.Count();
             Page = page < 0 ? 0 : page;
             Page = Page > LastPage ? LastPage : Page;
