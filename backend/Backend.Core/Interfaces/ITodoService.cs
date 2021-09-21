@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Backend.Core.Models;
+using Backend.Core.Models.Todo;
 
 namespace Backend.Core.Interfaces
 {

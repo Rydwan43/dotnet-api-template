@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
-using Backend.Core.Models;
+using Backend.Core.Models.Todo;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -39,6 +39,72 @@ namespace Backend.Api.Controllers
         {
             var todos = await _todoService.GetTodosAsync();
             return Ok(todos);
+        }
+
+        // [HttpGet]
+        // [ProducesResponseType(StatusCodes.Status200OK)]
+        // public async Task<ActionResult<PaginationModel<TodoModel>>> GetTodosAsync(int page, int pageSize)
+        // {
+        //     var todos = await _todoService.GetTodosAsync();
+        //     return Ok(new PaginationModel<TodoModel>(page, pageSize, todos.AsQueryable()));
+        // }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<TodoModel>> CreateTodoAsync(CreateTodoModel createTodoModel)
+        {
+            var todoModel = new TodoModel
+            {
+                Description = createTodoModel.Description,
+                IsCompleted = createTodoModel.IsCompleted
+            };
+
+            var createdTodo = await _todoService.CreateTodoAsync(todoModel);
+
+            return CreatedAtAction(nameof(GetTodoAsync), new { id = createdTodo.Id }, createdTodo);
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateTodoAsync(Guid id, TodoModel updateTodoModel)
+        {
+            if (id != updateTodoModel.Id)
+            {
+                return BadRequest();
+            }
+
+            var todo = await _todoService.GetTodoAsync(id);
+
+            if (todo is null)
+                return NotFound();
+
+            var todoModel = new TodoModel
+            {
+                Id = id,
+                Description = updateTodoModel.Description,
+                IsCompleted = updateTodoModel.IsCompleted,
+            };
+
+            await _todoService.UpdateTodoAsync(todoModel);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteTodoAsync(Guid id)
+        {
+            var todo = await _todoService.GetTodoAsync(id);
+            if (todo is null)
+            {
+                return NotFound();
+            }
+
+            await _todoService.DeleteTodoAsync(id);
+            return NoContent();
         }
     }
 }

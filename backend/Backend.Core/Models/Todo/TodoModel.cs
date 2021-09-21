@@ -1,6 +1,6 @@
 using System;
 
-namespace Backend.Core.Models
+namespace Backend.Core.Models.Todo
 {
     public class TodoModel
     {

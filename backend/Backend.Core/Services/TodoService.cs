@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
-using Backend.Core.Models;
+using Backend.Core.Models.Todo;
 using Backend.Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
