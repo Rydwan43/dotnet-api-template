@@ -2,10 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Core.Interfaces;
+using Backend.Core.Services;
+using Backend.Data;
+using Backend.Data.Interfaces;
+using Backend.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,6 +38,17 @@ namespace Backend.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend.Api", Version = "v1" });
             });
+
+            services.AddCors(x => x.AddPolicy("MyPolicy", builder => {
+                builder
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin();
+            }));
+
+            services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(Configuration["ConnectionString"]));
+            services.AddScoped<ITodoService, TodoService>();
+            services.AddScoped<ITodoRepository, TodoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +60,7 @@ namespace Backend.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api v1"));
             }
+            app.UseCors("MyPolicy");
 
             app.UseHttpsRedirection();
 
