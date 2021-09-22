@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Configuration;
 using Backend.Core.Interfaces;
 using Backend.Core.Models.DTOs.Requests;
 using Backend.Core.Models.DTOs.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +29,7 @@ namespace Backend.Api.Controllers
             _authService = authService;
             _jwtConfig = optionsMonitor.CurrentValue;
         }
+
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -67,5 +71,6 @@ namespace Backend.Api.Controllers
                 Succes = false
             });
         }
+        
     }
 }

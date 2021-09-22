@@ -16,10 +16,12 @@ namespace Backend.Api.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public TodoController(ITodoService todoService)
+        public TodoController(ITodoService todoService, IHttpContextAccessor httpContext)
         {
             _todoService = todoService;
+            _httpContext = httpContext;
         }
 
         [HttpGet("{id}")]

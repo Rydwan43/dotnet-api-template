@@ -39,7 +39,7 @@ namespace Backend.Core.Services
                 {
                     new Claim("Id", user.Id),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
@@ -54,7 +54,7 @@ namespace Backend.Core.Services
 
         public async Task<RegistrationResponse> Login(UserLoginRequest user)
         {
-            var existingUser = await _userManager.FindByEmailAsync(user.Email);
+            var existingUser = await _userManager.FindByNameAsync(user.Username);
             if (existingUser == null)
                 {
                     new RegistrationResponse(){
