@@ -68,7 +68,7 @@ namespace Backend.Core.Services
             
             if (todo is null)
             {
-                throw new AccessViolationException(nameof(todo));
+                return null;
             }
 
             return new TodoModel
