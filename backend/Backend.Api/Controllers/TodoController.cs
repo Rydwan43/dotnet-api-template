@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Backend.Core.Interfaces;
 using Backend.Core.Models.Helpers;
 using Backend.Core.Models.Todo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,11 @@ namespace Backend.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService;
+
         public TodoController(ITodoService todoService)
         {
             _todoService = todoService;

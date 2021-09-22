@@ -6,6 +6,7 @@ using Backend.Core.Interfaces;
 using Backend.Core.Models.Helpers;
 using Backend.Core.Models.Todo;
 using Backend.Data.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Core.Services
@@ -14,7 +15,7 @@ namespace Backend.Core.Services
     {
         private ITodoRepository _repository;
         
-        public TodoService(ITodoRepository repository)
+        public TodoService(ITodoRepository repository, UserManager<IdentityUser> userManager)
         {
             _repository = repository;
         }

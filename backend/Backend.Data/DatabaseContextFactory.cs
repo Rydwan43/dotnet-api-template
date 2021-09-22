@@ -10,8 +10,8 @@ namespace Backend.Data
 
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
 
-            //optionsBuilder.UseSqlServer("ConnectionString");
-            optionsBuilder.UseSqlServer(@"Server=localhost,1433;Database=TestDB;User Id=SA;Password=StrongPassword123");
+            optionsBuilder.UseSqlServer("name=ConnectionStrings:DefaultConnection");
+            // optionsBuilder.UseSqlServer(@"Server=localhost,1433;Database=TestDB;User Id=SA;Password=StrongPassword123");
 
             return new DatabaseContext(optionsBuilder.Options);
         }
