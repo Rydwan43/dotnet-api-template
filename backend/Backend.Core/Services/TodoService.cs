@@ -16,21 +16,17 @@ namespace Backend.Core.Services
     public class TodoService : ITodoService
     {
         private ITodoRepository _repository;
-        private UserManager<IdentityUser> _userManager;
-        private readonly IHttpContextAccessor _httpContext;
+        private IUserProfileService _userProfileService;
 
         public TodoService(ITodoRepository repository, 
-        UserManager<IdentityUser> userManager, 
-        IHttpContextAccessor httpContext)
+        IUserProfileService userProfileService)
         {
             _repository = repository;
-            _userManager = userManager;
-            _httpContext = httpContext;
+            _userProfileService = userProfileService;
         }
         public async Task<TodoModel> CreateTodoAsync(TodoModel todo)
         {
-            var UserName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
-            var user = await _userManager.FindByNameAsync(UserName);
+            var user = await _userProfileService.GetProfileInfo();
 
             if (todo is null || user is null)
             {
@@ -58,13 +54,19 @@ namespace Backend.Core.Services
 
         public async Task DeleteTodoAsync(Guid todoId)
         {
-            await _repository.RemoveAsync(todoId);
+            var todo = await _repository.FindAsync(todoId);
+            var user = await _userProfileService.GetProfileInfo();
+            
+            if (todo.UserId == user.Id)
+            {
+                await _repository.RemoveAsync(todoId);    
+            }
+            
         }
 
         public async Task<PaginationModel<TodoModel>> GetPaginationTodosAsync(int page, int pageSize)
         {
-            var UserName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
-            var user = await _userManager.FindByNameAsync(UserName);
+            var user = await _userProfileService.GetProfileInfo();
 
             IQueryable<Data.Entities.Todo> query = _repository.Get();
             query = query.Where(x => x.UserId == user.Id);
@@ -81,8 +83,7 @@ namespace Backend.Core.Services
 
         public async Task<TodoModel> GetTodoAsync(Guid todoId)
         {
-            var UserName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
-            var user = await _userManager.FindByNameAsync(UserName);
+            var user = await _userProfileService.GetProfileInfo();
             
             var todo = await _repository.FindAsync(todoId);
             
@@ -102,8 +103,7 @@ namespace Backend.Core.Services
 
         public async Task<List<TodoModel>> GetTodosAsync()
         {
-            var UserName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
-            var user = await _userManager.FindByNameAsync(UserName);
+            var user = await _userProfileService.GetProfileInfo();
 
             IQueryable<Data.Entities.Todo> query = _repository.Get();
             query = query.Where(x => x.UserId == user.Id);
@@ -119,8 +119,7 @@ namespace Backend.Core.Services
 
         public async Task<TodoModel> UpdateTodoAsync(TodoModel todo)
         {
-            var UserName = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;            
-            var user = await _userManager.FindByNameAsync(UserName);
+            var user = await _userProfileService.GetProfileInfo();
 
             var todoEntity = new Data.Entities.Todo
             {

@@ -96,9 +96,10 @@ namespace Backend.Api
             }));
 
             
+            services.AddScoped<IAuthManagementService, AuthManagementService>();
+            services.AddScoped<IUserProfileService, UserProfileService>();
             services.AddScoped<ITodoService, TodoService>();
             services.AddScoped<ITodoRepository, TodoRepository>();
-            services.AddScoped<IAuthManagementService, AuthManagementService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
