@@ -1,15 +1,14 @@
 using System.Threading.Tasks;
 using Backend.Core.Configuration;
-using Backend.Core.Models.DTOs.Requests;
-using Backend.Core.Models.DTOs.Responses;
+using Backend.Core.Models.DTOs.Auth;
 using Microsoft.AspNetCore.Identity;
 
 namespace Backend.Core.Interfaces
 {
     public interface IAuthManagementService
     {
-        Task<RegistrationResponse> Register(UserRegistrationDto user);
-        Task<RegistrationResponse> Login(UserLoginRequest user);
+        Task<AuthResponse> Register(AuthRegistrationRequest user);
+        Task<AuthResponse> Login(AuthLoginRequest user);
         string GenerateJwtToken(IdentityUser user);
     }
 }

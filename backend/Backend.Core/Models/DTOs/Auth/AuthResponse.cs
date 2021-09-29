@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Backend.Core.Configuration
+namespace Backend.Core.Models.DTOs.Auth
 {
-    public class AuthResult
+    public class AuthResponse
     {
         public string Token { get; set; }
         public bool Succes { get; set; }

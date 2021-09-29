@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Backend.Core.Configuration;
 using Backend.Core.Interfaces;
-using Backend.Core.Models.DTOs.Requests;
-using Backend.Core.Models.DTOs.Responses;
+using Backend.Core.Models.DTOs.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -52,14 +51,14 @@ namespace Backend.Core.Services
             return jwtToken;
         }
 
-        public async Task<RegistrationResponse> Login(UserLoginRequest user)
+        public async Task<AuthResponse> Login(AuthLoginRequest user)
         {
             var existingUser = await _userManager.FindByNameAsync(user.Username);
-            if (existingUser == null)
+            if (existingUser is null)
                 {
-                    new RegistrationResponse(){
+                    return new AuthResponse(){
                         Errors = new List<string>() {
-                            "Invalid login request"
+                            "Invalid username"
                         },
                         Succes = false
                     };
@@ -69,9 +68,9 @@ namespace Backend.Core.Services
 
             if (!isCorrect)
                 {
-                    return new RegistrationResponse(){
+                    return new AuthResponse(){
                         Errors = new List<string>() {
-                            "Invalid login request"
+                            "Invalid password"
                         },
                         Succes = false
                     };
@@ -79,19 +78,19 @@ namespace Backend.Core.Services
             
             var jwtToken = GenerateJwtToken(existingUser);
 
-            return new RegistrationResponse(){
+            return new AuthResponse(){
                     Succes = true,
                     Token = jwtToken
                 };
         }
 
-        public async Task<RegistrationResponse> Register(UserRegistrationDto user)
+        public async Task<AuthResponse> Register(AuthRegistrationRequest user)
         {
             var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
                 if (existingUser != null)
                 {
-                    return new RegistrationResponse(){
+                    return new AuthResponse(){
                             Errors = new List<string>() {
                             "Email already in use"
                         },
@@ -105,12 +104,12 @@ namespace Backend.Core.Services
                 {
                     var jwtToken = GenerateJwtToken(newUser);
 
-                    return new RegistrationResponse() {
+                    return new AuthResponse() {
                         Succes = true,
                         Token = jwtToken
                     };
                 } else {
-                    return new RegistrationResponse(){
+                    return new AuthResponse(){
                             Errors = isCreated.Errors.Select(x => x.Description).ToList(),
                             Succes = false
                     };

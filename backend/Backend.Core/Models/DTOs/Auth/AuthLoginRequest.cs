@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Backend.Core.Models.DTOs.Requests
+namespace Backend.Core.Models.DTOs.Auth
 {
-    public class UserLoginRequest
+    public class AuthLoginRequest
     {
         [Required]
         public string Username { get; set; }

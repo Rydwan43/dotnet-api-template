@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
 using Backend.Core.Models.Helpers;
-using Backend.Core.Models.Todo;
+using Backend.Core.Models.DTOs.Todo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

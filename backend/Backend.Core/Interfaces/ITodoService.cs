@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Backend.Core.Models.Helpers;
-using Backend.Core.Models.Todo;
+using Backend.Core.Models.DTOs.Todo;
 
 namespace Backend.Core.Interfaces
 {

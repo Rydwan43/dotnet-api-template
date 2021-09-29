@@ -5,7 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Interfaces;
 using Backend.Core.Models.Helpers;
-using Backend.Core.Models.Todo;
+using Backend.Core.Models.DTOs.Todo;
 using Backend.Data.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

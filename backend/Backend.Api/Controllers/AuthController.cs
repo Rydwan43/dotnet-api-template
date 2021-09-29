@@ -4,8 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Backend.Core.Configuration;
 using Backend.Core.Interfaces;
-using Backend.Core.Models.DTOs.Requests;
-using Backend.Core.Models.DTOs.Responses;
+using Backend.Core.Models.DTOs.Auth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -33,9 +32,8 @@ namespace Backend.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationDto user)
+        public async Task<ActionResult<AuthResponse>> Register([FromBody] AuthRegistrationRequest user)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +42,7 @@ namespace Backend.Api.Controllers
                 return Ok(response);
             }
 
-            return BadRequest(new RegistrationResponse(){
+            return BadRequest(new AuthResponse(){
                 Errors = new List<string>() {
                     "Invalid payload"
                 },
@@ -54,9 +52,8 @@ namespace Backend.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] AuthLoginRequest user)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +61,7 @@ namespace Backend.Api.Controllers
                 return Ok(response);
             }
 
-            return BadRequest(new RegistrationResponse(){
+            return BadRequest(new AuthResponse(){
                 Errors = new List<string>() {
                     "Invalid payload"
                 },
