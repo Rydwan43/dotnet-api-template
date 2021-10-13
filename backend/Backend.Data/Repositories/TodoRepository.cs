@@ -18,7 +18,6 @@ namespace Backend.Data.Repositories
 
         public async Task<Todo> AddAsync(Todo todo)
         {
-            todo.Id = todo.Id == Guid.Empty ? Guid.NewGuid() : todo.Id;
             _context.Add(todo);
             await _context.SaveChangesAsync();
             return todo;
